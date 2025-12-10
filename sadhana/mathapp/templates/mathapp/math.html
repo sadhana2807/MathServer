@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Area of Rectangle</title>
+
+    <style>
+        body {
+            background-color: #132c47;
+            font-size: 20px;
+        }
+
+        .box {
+            width: 500px;
+            height: 300px;
+            background-color:  #1b263b ;
+            margin: 150px auto;
+            border: 7px dashed #64dfdf;
+        }
+
+        h1 {
+            color: #fca311;
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        .formelt {
+            color: rgb(46, 171, 159);
+            text-align: center;
+            margin-top: 7px;
+            margin-bottom: 6px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="edge">
+    <div class="box">
+        <h1>Area of a Rectangle</h1>
+
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="formelt">
+                Length :
+                <input type="text" name="length" value="{{ l }}"> (in m) <br>
+            </div>
+
+            <div class="formelt">
+                Breadth :
+                <input type="text" name="breadth" value="{{ b }}"> (in m) <br>
+            </div>
+
+            <div class="formelt">
+                <input type="submit" value="Calculate">
+            </div>
+
+            <div class="formelt">
+                Area :
+                <input type="text" name="area" value="{{ area }}"> m<sup>2</sup>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+</body>
+</html>
