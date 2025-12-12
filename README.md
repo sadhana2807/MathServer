@@ -39,69 +39,28 @@ math.html
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Area of Rectangle</title>
 
-    <style>
-        body {
-            background-color: #132c47;
-            font-size: 20px;
-        }
 
-        .box {
-            width: 500px;
-            height: 300px;
-            background-color:  #1b263b ;
-            margin: 150px auto;
-            border: 7px dashed #64dfdf;
-        }
-
-        h1 {
-            color: #fca311;
-            text-align: center;
-            padding-top: 20px;
-        }
-
-        .formelt {
-            color: rgb(46, 171, 159);
-            text-align: center;
-            margin-top: 7px;
-            margin-bottom: 6px;
-        }
-    </style>
+    <title>Lamp Power Calculator</title>
 </head>
+<body style="text-align:center; margin-top:50px; background: linear-gradient(to right, #21053e,#7014cb , #9156cd, #b88fe1);">
+    <h2>Power of Lamp Filament</h2>
+    <p><b>Formula:</b> P = I² × R</p>
 
-<body>
+    <form method="post">
+        {% csrf_token %}
+        <label style="font-size: large;">Current (I in Amperes):</label><br>
+        <input type="number" name="current" step="0.01" required  width: 250px;    height: 30px;     font-size: 16px;><br><br>
 
-<div class="edge">
-    <div class="box">
-        <h1>Area of a Rectangle</h1>
+        <label style="font-size: larger;">Resistance (R in Ohms):</label><br>
+        <input type="number" name="resistance" step="0.01" required  width: 250px;    height: 30px;     font-size: 16px><br><br>
 
-        <form method="POST">
-            {% csrf_token %}
-            
-            <div class="formelt">
-                Length :
-                <input type="text" name="length" value="{{ l }}"> (in m) <br>
-            </div>
+        <button type="submit" aria-setsize="50">Calculate The Power</button>
+    </form>
 
-            <div class="formelt">
-                Breadth :
-                <input type="text" name="breadth" value="{{ b }}"> (in m) <br>
-            </div>
-
-            <div class="formelt">
-                <input type="submit" value="Calculate">
-            </div>
-
-            <div class="formelt">
-                Area :
-                <input type="text" name="area" value="{{ area }}"> m<sup>2</sup>
-            </div>
-        </form>
-
-    </div>
-</div>
-
+    {% if Power %}
+        <h3>Power: {{ Power }} W</h3>
+    {% endif %}
 </body>
 </html>
 
@@ -109,28 +68,15 @@ views.py
 
 from django.shortcuts import render
 
-def rectanglearea(request):
-    context = {}
-    context['area'] = "0"
-    context['l'] = "0"
-    context['b'] = "0"
+def calculate_power(request):
+    power = None
+    if request.method == "POST":
+        current = float(request.POST.get("current"))   # I
+        resistance = float(request.POST.get("resistance"))  # R
+        power = (current ** 2) * resistance            # P = I² × R
+        print(f"Current: {current} A, Resistance: {resistance} Ω, Power: {power:.2f} W")
 
-    if request.method == 'POST':
-        print("POST method is used")
-        l = request.POST.get('length', '0')
-        b = request.POST.get('breadth', '0')
-
-        print("length=", l)
-        print("breadth=", b)
-
-        area = int(l) * int(b)
-        context['area'] = area
-        context['l'] = l
-        context['b'] = b
-
-        print("Area=", area)
-
-    return render(request, 'mathapp/math.html',context)
+    return render(request, 'mathapp/math.html', {'Power': power})
 
 urls.py
 
@@ -140,17 +86,16 @@ from mathapp import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('areaofrectangle/', views.rectanglearea, name="areaofrectangle"),
-    path('', views.rectanglearea, name="areaofrectangleroot"),
+    path('',views.calculate_power),
 ]
 
 ~~~
 
 ## SERVER SIDE PROCESSING:
-![alt text](<Screenshot 2025-12-10 214004.png>)
+![alt text](<Screenshot 2025-12-12 104305.png>)
 
 ## HOMEPAGE:
-![alt text](<Screenshot 2025-12-10 213720.png>)
+![alt text](<Screenshot 2025-12-12 104230.png>)
 
 ## RESULT:
 The program for performing server side processing is completed successfully.
